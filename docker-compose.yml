@@ -1,0 +1,45 @@
+services:
+  db:
+    image: postgres:15
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-sportcamp}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-sportcamp}
+      POSTGRES_DB: ${POSTGRES_DB:-sportcamp}
+    volumes:
+      - db-data:/var/lib/postgresql/data
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+
+  web:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: development
+      DATABASE_URL: ${DATABASE_URL_DOCKER:-postgresql://sportcamp:sportcamp@db:5432/sportcamp}
+    depends_on:
+      - db
+    volumes:
+      - .:/app
+      - /app/node_modules
+    command: npm run dev -- --hostname 0.0.0.0
+
+  scheduler:
+    build: .
+    depends_on:
+      - db
+    environment:
+      DATABASE_URL_DOCKER: ${DATABASE_URL_DOCKER:-postgresql://sportcamp:sportcamp@db:5432/sportcamp}
+      BILLING_CRON: ${BILLING_CRON:-0 2 * * *}
+      BILLING_TZ: ${BILLING_TZ:-UTC}
+      NOTIFY_CRON: ${NOTIFY_CRON:-0 * * * *}
+      NOTIFY_TZ: ${NOTIFY_TZ:-UTC}
+      NOTIFY_WINDOW_HOURS: ${NOTIFY_WINDOW_HOURS:-24}
+    volumes:
+      - .:/app
+      - /app/node_modules
+    command: npm run billing:scheduler
+
+volumes:
+  db-data:

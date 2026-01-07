@@ -1,0 +1,37 @@
+{
+  "name": "arenaflow",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint",
+    "billing:run": "node scripts/billing-run.js",
+    "billing:scheduler": "node scripts/scheduler.js",
+    "notifications:run": "node scripts/notifications-run.js",
+    "seed:superadmin": "node scripts/seed-superadmin.js"
+  },
+  "dependencies": {
+    "bcryptjs": "^3.0.2",
+    "dotenv": "^16.4.5",
+    "next": "16.1.1",
+    "node-cron": "^3.0.3",
+    "pg": "^8.16.3",
+    "qrcode": "^1.5.4",
+    "react": "19.2.3",
+    "react-dom": "19.2.3"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "20.19.27",
+    "@types/pg": "^8.16.0",
+    "@types/qrcode": "^1.5.5",
+    "@types/react": "19.2.7",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "16.1.1",
+    "tailwindcss": "^4",
+    "typescript": "5.9.3"
+  }
+}
